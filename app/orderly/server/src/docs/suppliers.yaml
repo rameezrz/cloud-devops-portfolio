@@ -1,0 +1,188 @@
+tags:
+  - name: Suppliers
+    description: Default operations related to suppliers
+
+paths:
+  /api/v1/suppliers:
+    get:
+      tags:
+        - Suppliers
+      summary: Retrieve a list of suppliers
+      description: Get all suppliers with pagination
+      parameters:
+        - in: query
+          name: page
+          required: false
+          description: Page number to retrieve
+          schema:
+            type: integer
+            default: 1
+        - in: query
+          name: limit
+          required: false
+          description: Number of suppliers per page
+          schema:
+            type: integer
+            default: 10
+      responses:
+        200:
+          description: A list of suppliers
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  page:
+                    type: integer
+                  limit:
+                    type: integer
+                  totalSuppliers:
+                    type: integer
+                  totalPages:
+                    type: integer
+                  suppliers:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Supplier"
+        400:
+          description: Invalid input
+        500:
+          description: Server error
+    post:
+      tags:
+        - Suppliers
+      summary: Create a new supplier
+      description: Adds a new supplier to the system.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SupplierInput"
+      responses:
+        201:
+          description: Supplier created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Supplier"
+        409:
+          description: A supplier with this email already exists.
+        500:
+          description: Server error
+
+  /api/v1/suppliers/{id}:
+    get:
+      tags:
+        - Suppliers
+      summary: Retrieve a supplier by ID
+      description: Get details of a specific supplier by their ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the supplier to retrieve
+          schema:
+            type: string
+      responses:
+        200:
+          description: Supplier found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Supplier"
+        404:
+          description: No Supplier found with this id
+        500:
+          description: Server error
+    put:
+      tags:
+        - Suppliers
+      summary: Update an existing supplier
+      description: Updates the details of an existing supplier by their ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the supplier to update
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SupplierInput"
+      responses:
+        200:
+          description: Supplier updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Supplier"
+        404:
+          description: No Supplier found with this id
+        409:
+          description: A supplier with this email already exists.
+        500:
+          description: Server error
+    delete:
+      tags:
+        - Suppliers
+      summary: Delete a supplier
+      description: Deletes a supplier from the system.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the supplier to delete
+          schema:
+            type: string
+      responses:
+        200:
+          description: Supplier deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Supplier deleted successfully"
+        404:
+          description: No Supplier found with this id
+        500:
+          description: Server error
+
+components:
+  schemas:
+    Supplier:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    SupplierInput:
+      type: object
+      required:
+        - name
+        - email
+      properties:
+        name:
+          type: string
+          example: "Supplier A"
+        email:
+          type: string
+          format: email
+          example: "supplierA@example.com"

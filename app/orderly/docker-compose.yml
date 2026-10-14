@@ -1,0 +1,37 @@
+services:
+  orderly-be:
+    container_name: orderly-be
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+      target: production
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./server/.env
+    networks:
+      - orderly
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+
+  orderly-fe:
+    container_name: orderly-fe
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+      target: production
+      args:
+        # Called from the user's browser, so use a host-reachable URL,
+        # not the internal http://orderly-be:5000 container address
+        VITE_BASE_URL: ${VITE_BASE_URL:-http://localhost:5000/api/v1}
+    ports:
+      - "3000:8080"
+    depends_on:
+      - orderly-be
+    networks:
+      - orderly
+
+networks:
+  orderly:
+    driver: bridge

@@ -1,0 +1,213 @@
+tags:
+  - name: Items
+    description: Default operations related to Items
+
+paths:
+  /api/v1/items:
+    get:
+      tags:
+        - Items
+      summary: "Get all items"
+      description: "Retrieve a paginated list of items."
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+          required: false
+          description: "Page number for pagination."
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          required: false
+          description: "Number of items per page."
+      responses:
+        "200":
+          description: "A list of items."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Item"
+                  total:
+                    type: integer
+                    description: "Total number of items available."
+                  page:
+                    type: integer
+                    description: "Current page number."
+                  limit:
+                    type: integer
+                    description: "Number of items per page."
+        "500":
+          description: "Server error."
+
+    post:
+      tags:
+        - Items
+      summary: "Create a new item"
+      description: "Upload images and create a new item."
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                itemName:
+                  type: string
+                  description: "Name of the item."
+                description:
+                  type: string
+                  description: "Detailed description of the item."
+                supplier:
+                  type: string
+                  description: "Supplier ID for the item."
+                itemImages:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  description: "Images of the item."
+      responses:
+        "201":
+          description: "Item created successfully."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Item"
+        "400":
+          description: "Invalid input or missing fields."
+        "409":
+          description: "An item with the same name already exists."
+        "500":
+          description: "Server error."
+
+  /api/v1/items/{id}:
+    get:
+      tags:
+        - Items
+      summary: "Get item by ID"
+      description: "Retrieve details of a specific item by its ID."
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: "Unique ID of the item to retrieve."
+      responses:
+        "200":
+          description: "Item details."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Item"
+        "404":
+          description: "Item not found."
+        "500":
+          description: "Server error."
+
+    put:
+      tags:
+        - Items
+      summary: "Update an item by ID"
+      description: "Update specific fields of an existing item, including images."
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: "Unique ID of the item to update."
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                itemName:
+                  type: string
+                  description: "Updated name of the item."
+                description:
+                  type: string
+                  description: "Updated description of the item."
+                supplier:
+                  type: string
+                  description: "Updated supplier ID for the item."
+                itemImages:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  description: "Updated images of the item."
+      responses:
+        "200":
+          description: "Item updated successfully."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Item"
+        "400":
+          description: "Invalid input or missing fields."
+        "404":
+          description: "Item not found."
+        "500":
+          description: "Server error."
+
+    delete:
+      tags:
+        - Items
+      summary: "Delete an item by ID"
+      description: "Remove an item from the inventory by its unique ID."
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: "Unique ID of the item to delete."
+      responses:
+        "204":
+          description: "Item deleted successfully; no content returned."
+        "404":
+          description: "Item not found."
+        "500":
+          description: "Server error."
+
+components:
+  schemas:
+    Item:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: "Unique identifier for the item."
+        itemName:
+          type: string
+          description: "Name of the item."
+        description:
+          type: string
+          description: "Detailed description of the item."
+        supplier:
+          type: string
+          description: "ID of the supplier associated with the item."
+        itemImages:
+          type: array
+          items:
+            type: string
+            format: uri
+          description: "List of URLs of the item's images."
+        createdAt:
+          type: string
+          format: date-time
+          description: "Timestamp when the item was created."
+        updatedAt:
+          type: string
+          format: date-time
+          description: "Timestamp when the item was last updated."

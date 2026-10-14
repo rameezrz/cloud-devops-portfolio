@@ -1,0 +1,162 @@
+tags:
+  - name: orders
+    description: API endpoints for managing orders.
+
+paths:
+  /orders:
+    post:
+      tags:
+        - orders
+      summary: Create a new order
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Order"
+      responses:
+        201:
+          description: Order created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        400:
+          description: Bad request - Invalid input data
+
+    get:
+      tags:
+        - orders
+      summary: Retrieve a list of all orders
+      responses:
+        200:
+          description: A list of orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Order"
+        500:
+          description: Server error
+
+  /orders/{id}:
+    get:
+      tags:
+        - orders
+      summary: Get an order by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the order to retrieve
+      responses:
+        200:
+          description: Order found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        404:
+          description: Order not found
+        500:
+          description: Server error
+
+    put:
+      tags:
+        - orders
+      summary: Update an order by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the order to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Order"
+      responses:
+        200:
+          description: Order updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        400:
+          description: Bad request - Invalid input data
+        404:
+          description: Order not found
+        500:
+          description: Server error
+
+    delete:
+      tags:
+        - orders
+      summary: Delete an order by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the order to delete
+      responses:
+        204:
+          description: Order deleted successfully
+        404:
+          description: Order not found
+        500:
+          description: Server error
+
+components:
+  schemas:
+    Order:
+      type: object
+      properties:
+        orderNo:
+          type: string
+          example: ORD12345
+        orderDate:
+          type: string
+          format: date
+          example: "2024-10-30"
+        supplier:
+          type: string
+          description: Supplier ID reference
+          example: "60d21b4667d0d8992e610c85"
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              item:
+                type: string
+                description: Item ID reference
+                example: "60d21b4967d0d8992e610c88"
+              orderQty:
+                type: number
+                example: 5
+              discount:
+                type: number
+                example: 10.0
+              itemAmount:
+                type: number
+                example: 500.0
+              netAmount:
+                type: number
+                example: 450.0
+        itemTotal:
+          type: number
+          example: 1000.0
+        discountTotal:
+          type: number
+          example: 50.0
+        netAmount:
+          type: number
+          example: 950.0
