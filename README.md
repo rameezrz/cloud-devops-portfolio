@@ -47,7 +47,8 @@ _Only items I have actually used are marked as done in the roadmap below._
 
 ## 🏗️ Architecture
 
-![Architecture](docs/vpc%20diagram.jpg)   
+![Architecture](docs/architecture-diagram.jpg)   
+_Reference VPC design: 2 public and 2 private subnets across 2 AZs, with optional NAT._
 
 ## 🚀 Getting started
 
