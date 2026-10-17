@@ -37,7 +37,7 @@ _Only items I have actually used are marked as done in the roadmap below._
 
 ## 🗺️ Roadmap
 
-- [ ] Containerize the MERN app with Docker
+- [x] Containerize the MERN app with Docker
 - [ ] Deploy manually on AWS (EC2 + S3 + managed DB)
 - [ ] Rebuild the infrastructure with Terraform
 - [ ] Add a CI/CD pipeline with GitHub Actions
@@ -47,7 +47,7 @@ _Only items I have actually used are marked as done in the roadmap below._
 
 ## 🏗️ Architecture
 
-_Diagram coming soon. Will be added to `/docs/architecture.png`._
+![Architecture](docs/vpc%20diagram.jpg)   
 
 ## 🚀 Getting started
 
