@@ -10,9 +10,18 @@
 .terraform/
 crash.log
 *.tfvars
+*.tfplan
+tfplan
+override.tf
+override.tf.json
+*.tfvars.json
 
 # Node
 node_modules/
+dist/
+build/
+coverage/
+npm-debug.log*
 
 # OS / editor
 .DS_Store
