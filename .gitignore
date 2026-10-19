@@ -5,6 +5,7 @@
 *.key
 
 # Terraform
+**/.terraform/*
 *.tfstate
 *.tfstate.*
 .terraform/
@@ -15,6 +16,11 @@ tfplan
 override.tf
 override.tf.json
 *.tfvars.json
+
+# Bootstrap's local state
+infra/bootstrap/*.tfstate
+infra/bootstrap/*.tfstate.*
+infra/bootstrap/tfplan
 
 # Node
 node_modules/

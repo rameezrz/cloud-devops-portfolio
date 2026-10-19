@@ -10,20 +10,34 @@ terraform {
 }
 
 provider "aws" {
-  region = "us-east-1"
+  region = var.region
+  default_tags {
+    tags = { Project = "cloud-devops-portfolio", ManagedBy = "terraform" }
+  }
+}
+
+variable "region" {
+  type    = string
+  default = "us-east-1"
 }
 
 variable "environment" {
-  description = "Environment name (dev, staging, production)"
-  type        = string
-  default     = "staging"
+  type    = string
+  default = "dev"
+  validation {
+    condition     = contains(["dev", "staging", "production"], var.environment)
+    error_message = "environment must be dev, staging or production."
+  }
 }
 
-resource "aws_s3_bucket" "demo_bucket" {
-  bucket = "${var.environment}-rzeee-bucket-12345"
+resource "random_id" "suffix" {
+  byte_length = 4
+}
 
-  tags = {
-    Name        = "My bucket 2.0"
-    Environment = var.environment
-  }
+resource "aws_s3_bucket" "demo" {
+  bucket = "${var.environment}-hello-tf-${random_id.suffix.hex}"
+}
+
+output "bucket_name" {
+  value = aws_s3_bucket.demo.bucket
 }
