@@ -45,3 +45,14 @@ Its primary purpose is to map the resource declarations in your configuration co
 **Local Backend**: Stores the file on your local machine. This works well for isolated or personal projects.
 
 **Remote Backend**: For teams, state is stored in a shared cloud environment like an Amazon S3 bucket, Azure Blob Storage, or Terraform Cloud. Remote backends provide state locking (preventing two people from running updates simultaneously and corrupting the file) and keep secrets out of local environments.
+
+## Remote state
+
+- Remote state gives every run (and every teammate/CI job) one shared source of truth, instead of a local file that can be lost, diverged, or committed with secrets by accident.
+- Locking stops two `apply` runs from writing state at once, which can corrupt it; `use_lockfile = true` does this natively in S3, so no DynamoDB table is needed.
+- Versioning + encryption + a public-access block mean state (which can contain sensitive values) is recoverable, protected at rest, and never exposed.
+
+### Bootstrap (one-time)
+`infra/bootstrap` creates the state bucket and keeps its own state **locally** (gitignored).
+    cd infra/bootstrap && terraform init && terraform apply
+If the local bootstrap state is lost, re-run `init` and `terraform import` each resource (see the import commands in docs), then confirm `terraform plan` shows no changes.
