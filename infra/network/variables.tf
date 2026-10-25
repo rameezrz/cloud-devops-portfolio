@@ -42,3 +42,15 @@ variable "subnet_newbits" {
   type        = number
   default     = 8
 }
+
+variable "app_port" {
+  description = "Port the app listens on; the only port the app SG opens"
+  type        = number
+  default     = 8080
+}
+
+variable "enable_https" {
+  description = "Open 443 on the ALB SG (turn on once you have an ACM cert)"
+  type        = bool
+  default     = false
+}
