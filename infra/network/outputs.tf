@@ -33,3 +33,7 @@ output "instance_profile_name" {
 output "ec2_role_arn" {
   value = aws_iam_role.ec2.arn
 }
+
+output "app_instance_id" {
+  value = aws_instance.app_instance.id
+}
