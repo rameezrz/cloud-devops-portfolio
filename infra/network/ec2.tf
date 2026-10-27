@@ -24,7 +24,7 @@ resource "aws_instance" "app_instance" {
   depends_on = [aws_route.private_nat]
 
   lifecycle {
-    ignore_changes = [ ami ]
+    ignore_changes = [ami]
   }
 
   tags = merge(var.tags, { Name = "${var.env}-app-ec2" })
