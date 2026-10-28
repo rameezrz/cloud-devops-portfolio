@@ -76,3 +76,55 @@ resource "aws_route" "private_nat" {
   destination_cidr_block = "0.0.0.0/0"
   nat_gateway_id         = aws_nat_gateway.nat[0].id
 }
+
+resource "aws_lb" "app" {
+  name               = "${var.env}-alb"
+  internal           = false
+  load_balancer_type = "application"
+  security_groups    = [aws_security_group.alb.id]
+  subnets            = [for subnet in aws_subnet.public : subnet.id]
+
+  tags = merge(var.tags, { Name = "${var.env}-alb" })
+}
+
+resource "aws_lb_target_group" "app" {
+  name        = "${var.env}-app-tg"
+  protocol    = "HTTP"
+  port        = var.app_port
+  vpc_id      = aws_vpc.main.id
+  target_type = "instance"
+
+  # Default is 300s, which makes deregistering (and destroy) slow.
+  deregistration_delay = 30
+
+  health_check {
+    path                = "/"
+    matcher             = "200"
+    interval            = 15
+    timeout             = 5
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+  }
+
+  tags = merge(var.tags, { Name = "${var.env}-app-tg" })
+}
+
+resource "aws_lb_listener" "http" {
+  load_balancer_arn = aws_lb.app.arn
+  port              = 80
+  protocol          = "HTTP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.app.arn
+  }
+
+  tags = merge(var.tags, { Name = "${var.env}-http-listener" })
+}
+
+resource "aws_lb_target_group_attachment" "app" {
+  target_group_arn = aws_lb_target_group.app.arn
+  target_id        = aws_instance.app_instance.id
+  port             = var.app_port
+}
+

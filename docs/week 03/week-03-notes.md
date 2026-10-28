@@ -1,10 +1,8 @@
 # Week 03: Security Groups, IAM Role, EC2, and ALB
 
-> This note covers Tasks 2–3. I’ll add Task 4 once I’ve finished it.
-
 ## Summary
 
-I created security groups for the ALB (Application Load Balancer) and app tier, along with an IAM role for EC2 with permissions for SSM and ECR image pulls. I left port 22 closed and used SSM Session Manager to log in to the instance.
+I set up security groups for the ALB and app tier, an EC2 IAM role for SSM and ECR access, and an EC2 instance with IMDSv2 enabled. I also configured an ECR repository and an ALB that forwards traffic to the private instance. I left port 22 closed and used SSM Session Manager to connect. I tested the security group rules with real app traffic, confirmed SSM access, then destroyed all 32 resources.
 
 ## What I built
 
@@ -13,6 +11,10 @@ I created security groups for the ALB (Application Load Balancer) and app tier, 
 - **IAM role and instance profile for EC2:** Includes `AmazonSSMManagedInstanceCore` and ECR read-only permissions.
 - **EC2 instance:** Created a `t3.micro` instance using the Amazon Linux 2023 AMI from an SSM parameter. Installed Docker with `user_data`. IMDSv2 is enabled.
 - **ECR image:** Created the `orderly_backend` repository for the backend API, with image scanning and encryption enabled. I also added a lifecycle rule to keep the latest 30 images and avoid unnecessary storage costs.
+- **ALB (Application Load Balancer):** I created the ALB across two public subnets. Its security group allows incoming HTTP traffic from the internet. I added a listener to receive that traffic and forward it to the target group, where I registered the private EC2 instance.
+
+  Traffic flow: `Internet → ALB → listener → target group → EC2`  
+  The app security group allows traffic from the ALB on the application port.
 
 ## Key ideas in my own words
 
@@ -146,7 +148,7 @@ docker run -d -p 5000:5000 \
 
 ## Cost control
 
-I applied 25 resources and destroyed all 25 at the end of the session.
+I applied 32 resources and destroyed all 32 at the end of the session.
 
 ## Time spent
 
@@ -154,4 +156,8 @@ About 5 hours: roughly 3.5 hours reading documentation and 1.5 hours building an
 
 ## Not verified yet
 
-I haven’t tested the security group rules with real app traffic; I’ll do that in Tasks 3 and 4. I did confirm that I could connect to the instance through SSM.
+I have tested the security group rules with real app traffic; and it's working. I did confirm that I could connect to the instance through SSM.
+
+## Verified
+
+I tested the security group rules with real app traffic and confirmed they work. I also confirmed that I could connect to the instance through SSM.

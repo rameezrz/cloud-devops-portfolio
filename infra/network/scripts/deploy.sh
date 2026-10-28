@@ -32,4 +32,4 @@ docker tag "${REPO_NAME}:${IMAGE_TAG}" "${FULL_IMAGE_URI}"
 echo "📤 Step 4: Pushing the image to Amazon ECR..."
 docker push "${FULL_IMAGE_URI}"
 
-echo "✅ Success! Deployment pipeline complete."
+echo "✅ Success! Deployment pipeline complete. Image : ${FULL_IMAGE_URI}"

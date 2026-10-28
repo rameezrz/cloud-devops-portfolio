@@ -46,7 +46,7 @@ variable "subnet_newbits" {
 variable "app_port" {
   description = "Port the app listens on; the only port the app SG opens"
   type        = number
-  default     = 8080
+  default     = 5000
 }
 
 variable "enable_https" {
