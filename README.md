@@ -38,7 +38,9 @@ _Only items I have actually used are marked as done in the roadmap below._
 ## 🗺️ Roadmap
 
 - [x] Containerize the MERN app with Docker
-- [ ] Deploy manually on AWS (EC2 + S3 + managed DB)
+- [x] Deploy backend on AWS: EC2 + ALB + ECR
+- [ ] Frontend on S3/CloudFront
+- [ ] Managed DB
 - [ ] Rebuild the infrastructure with Terraform
 - [ ] Add a CI/CD pipeline with GitHub Actions
 - [ ] Add monitoring and alerting
@@ -47,7 +49,7 @@ _Only items I have actually used are marked as done in the roadmap below._
 
 ## 🏗️ Architecture
 
-![Architecture](docs/architecture-diagram.jpg)   
+![Architecture](docs/architecture-diagram-v3.png)   
 _Reference VPC design: 2 public and 2 private subnets across 2 AZs, with optional NAT._
 
 ## 🚀 Getting started
