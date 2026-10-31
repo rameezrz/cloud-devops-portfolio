@@ -43,7 +43,7 @@ Teardown: destroy only `network`. Destroy order is the reverse of apply order, a
 - **Two untagged images** appeared in ECR next to my tagged one. They are probably BuildKit provenance manifests. My lifecycle rule counts them in the 30-image limit.
 
 ## Cost control
-This week's network stack: 29 resources applied and 27 destroyed. The difference is the two ECR resources, which now live in the `ecr` stack on purpose. The ECR repo stays and costs very little.
+This week's network stack: 32 resources applied and 30 destroyed. The difference is the two ECR resources, which now live in the `ecr` stack on purpose. The ECR repo stays and costs very little.
 
 ## Time spent
 
@@ -51,7 +51,8 @@ This week's network stack: 29 resources applied and 27 destroyed. The difference
 |---|---:|---:|
 | 1. Diagram v3 + repo/notes housekeeping | 1 h 30 m | 1 h |
 | 2. Persistent ECR stack | 1 h 30 m | 2 h |
-| **Total** | **3 h** | **3 h** |
+| 3. Backend hardening + /health endpoint | 1 h | 1 h |
+| **Total** | **4 h** | **4 h** |
 
 Task 2 took longer than planned because I had to learn `state rm` and `import` as I went.
 

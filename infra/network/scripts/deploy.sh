@@ -21,7 +21,7 @@ echo "🚀 Step 1: Building local Docker image..."
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TARGET_DIR="${SCRIPT_DIR}/../../../app/orderly/server"
 cd "$TARGET_DIR"
-docker build -t "${REPO_NAME}:${IMAGE_TAG}" .
+docker build --platform linux/amd64 --provenance=false -t "${REPO_NAME}:${IMAGE_TAG}" .
 
 echo "🔑 Step 2: Authenticating local Docker client with Amazon ECR..."
 aws ecr get-login-password --region "${REGION}" | docker login --username AWS --password-stdin "${ECR_REGISTRY}"
