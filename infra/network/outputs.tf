@@ -38,11 +38,6 @@ output "app_instance_id" {
   value = aws_instance.app_instance.id
 }
 
-output "backend_repository_url" {
-  description = "The URL of the ECR repository for the backend application"
-  value       = aws_ecr_repository.orderly_backend.repository_url
-}
-
 output "alb_dns_name" {
   value = aws_lb.app.dns_name
 }

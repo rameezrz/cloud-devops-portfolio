@@ -52,6 +52,16 @@ _Only items I have actually used are marked as done in the roadmap below._
 ![Architecture](docs/architecture-diagram-v3.png)   
 _Reference VPC design: 2 public and 2 private subnets across 2 AZs, with optional NAT._
 
+## Stacks and their lifetimes
+
+| Stack | Contains | Lifetime | Apply order |
+|---|---|---|---|
+| `infra/bootstrap` | S3 bucket for Terraform state | permanent | 1 |
+| `infra/ecr` | ECR repository + lifecycle policy | persistent | 2 |
+| `infra/network` | VPC, NAT, security groups, IAM role, EC2, ALB | ephemeral, destroyed after each session | 3 |
+
+Teardown: destroy only `network`. Destroy order is the reverse of apply order, and `bootstrap` and `ecr` stay.
+
 ## 🚀 Getting started
 
 _Setup and deployment instructions will be added as each component is completed._

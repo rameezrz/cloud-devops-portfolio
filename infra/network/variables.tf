@@ -20,7 +20,7 @@ variable "az_count" {
 
 variable "enable_nat" {
   type    = bool
-  default = true
+  default = false
 }
 
 variable "env" {
